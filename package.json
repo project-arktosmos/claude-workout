@@ -6,6 +6,9 @@
 		"dev": "tauri dev",
 		"dev:vite": "vite dev",
 		"dev:qq": "node scripts/generate-qq-locale.js",
+		"db:reset": "node scripts/db-reset.mjs",
+		"extract:map-assets": "python3 scripts/extract-map-assets.py",
+		"gen:pokemon": "node scripts/generate-pokemon-compendium.mjs",
 		"build": "vite build",
 		"preview": "vite preview",
 		"tauri": "tauri",
@@ -23,7 +26,9 @@
 	"dependencies": {
 		"@sveltejs/adapter-static": "^3.0.9",
 		"@tauri-apps/api": "^2.11.0",
+		"@tauri-apps/plugin-store": "^2.4.3",
 		"classnames": "^2.5.1",
+		"pixi.js": "^8.18.1",
 		"svelte-i18n": "^4.0.1"
 	},
 	"devDependencies": {

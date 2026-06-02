@@ -1,2 +1,87 @@
 @import 'tailwindcss';
 @plugin "daisyui";
+
+/*
+ * Pokémon follower walk cycle.
+ *
+ * Follower sprites are 256×256 sheets: a 4×4 grid of 64×64 frames, where each
+ * row is a facing direction and each column a walk frame. Scaled up 2× the box
+ * is 128px and the sheet 512px, so stepping background-position-x from 0 to
+ * -512px in steps(4) cycles through the four frames of the current row. The row
+ * (direction) is chosen separately via background-position-y.
+ */
+@keyframes follower-walk {
+	from {
+		background-position-x: 0;
+	}
+	to {
+		background-position-x: -512px;
+	}
+}
+
+.animate-follower-walk {
+	animation: follower-walk 0.8s steps(4) infinite;
+}
+
+/*
+ * Trainer sprite idle animations.
+ *
+ * The trainer sprites are single static frames, so we fake the motion of each
+ * activity with a short, looping transform. One keyframe set per activity keeps
+ * the page lively without a sprite sheet — applied via `.animate-trainer-*`.
+ */
+@keyframes trainer-run {
+	0%,
+	100% {
+		transform: translateY(0) scaleY(1);
+	}
+	50% {
+		transform: translateY(-12%) scaleY(1.04);
+	}
+}
+
+@keyframes trainer-bike {
+	0%,
+	100% {
+		transform: translateY(0) rotate(-2deg);
+	}
+	50% {
+		transform: translateY(-6%) rotate(2deg);
+	}
+}
+
+@keyframes trainer-surf {
+	0%,
+	100% {
+		transform: rotate(-6deg) translateY(0);
+	}
+	50% {
+		transform: rotate(6deg) translateY(-8%);
+	}
+}
+
+@keyframes trainer-fish {
+	0%,
+	100% {
+		transform: rotate(-3deg) translateX(0);
+	}
+	50% {
+		transform: rotate(3deg) translateX(4%);
+	}
+}
+
+.animate-trainer-run {
+	animation: trainer-run 0.45s ease-in-out infinite;
+}
+
+.animate-trainer-bike {
+	animation: trainer-bike 0.6s ease-in-out infinite;
+}
+
+.animate-trainer-surf {
+	animation: trainer-surf 2s ease-in-out infinite;
+}
+
+.animate-trainer-fish {
+	animation: trainer-fish 2.4s ease-in-out infinite;
+}

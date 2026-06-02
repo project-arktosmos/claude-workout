@@ -146,6 +146,50 @@ Services use the `localStorageWritableStore` utility which automatically handles
 
 ---
 
+## Persistence — use the Tauri Store plugin (NOT browser localStorage)
+
+This is a Tauri app. **The standard way to persist browser-side state is the
+Tauri Store plugin (`@tauri-apps/plugin-store`), accessed through the
+`persistentStore` helper in `$utils/tauriStore`.** Do **not** call the browser's
+native `window.localStorage` directly — inside a packaged Tauri webview it is not
+a reliable persistence target, whereas the Store plugin writes a JSON file in the
+OS app-data directory that survives across sessions.
+
+> The older `localStorageWritableStore` (and the `ArrayServiceClass` /
+> `ObjectServiceClass` built on it) use browser `localStorage` and are **legacy**.
+> Keep them for existing services, but write all new persistence through
+> `persistentStore`.
+
+### Using `persistentStore`
+
+```typescript
+import { persistentStore } from '$utils/tauriStore';
+
+interface Score {
+	value: number;
+}
+
+export const score = persistentStore<Score>('score', { value: 0 });
+
+// In a component / onMount:
+await score.ready;        // wait for the saved value to hydrate (optional)
+score.set({ value: 10 }); // updates the store AND persists to disk
+```
+
+- `set` / `update` write to the store and persist via the plugin in one step.
+- `await store.ready` before reading the restored value when the saved state
+  matters (hydration is async).
+- Outside the Tauri runtime (plain `pnpm dev:vite` in a browser, or tests) there
+  is no IPC, so it degrades to an in-memory writable — the API works but nothing
+  is persisted. Persistence is a Tauri-runtime feature.
+
+A persisted feature is typically a thin service over `persistentStore` (e.g.
+`src/services/road-progress.service.ts`). The Rust side registers the plugin in
+`src-tauri/src/lib.rs` and grants `store:default` in
+`src-tauri/capabilities/default.json`.
+
+---
+
 ## Adapters
 
 Adapters transform data between external formats (APIs, raw data) and internal application formats. **All data transformation logic belongs in adapters, not in components or services.**
