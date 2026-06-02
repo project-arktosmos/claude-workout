@@ -24,6 +24,11 @@
 		return new Date(ts).toLocaleTimeString();
 	}
 
+	/** The project driving a prompt — the basename of its working directory. */
+	function projectName(cwd: string): string {
+		return cwd.split('/').filter(Boolean).at(-1) ?? '—';
+	}
+
 	function formatElapsed(ms: number): string {
 		const total = Math.max(0, Math.floor(ms / 1000));
 		const hours = Math.floor(total / 3600);
@@ -44,7 +49,10 @@
 		<li class="flex items-start gap-2 px-3 py-2">
 			<span class={classNames('badge badge-xs mt-0.5 shrink-0', statusBadge[prompt.status])}></span>
 			<div class="min-w-0 flex-1">
-				<p class="truncate text-xs" title={prompt.prompt}>
+				<p class="truncate text-xs font-semibold" title={prompt.cwd}>
+					{projectName(prompt.cwd)}
+				</p>
+				<p class="truncate text-xs opacity-80" title={prompt.prompt}>
 					{prompt.prompt || '—'}
 				</p>
 				<div class="flex flex-wrap gap-x-3 text-[0.65rem] opacity-60">

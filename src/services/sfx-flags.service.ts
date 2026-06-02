@@ -11,14 +11,11 @@ import { persistentStore } from '$utils/tauriStore';
 export type SfxFlags = Record<string, string>;
 
 /**
- * The set ships with a few flags out of the box: "firered 0005" → "new prompt",
- * "firered 000A" → "exp gain", "firered 0017" → "caught",
- * "firered 0140" → "exercise complete".
+ * The set ships with a couple of flags out of the box: "firered 0005" →
+ * "new prompt", "firered 0140" → "exercise complete".
  */
 export const SFX_FLAGS_DEFAULT: SfxFlags = {
 	'0005': 'new prompt',
-	'000A': 'exp gain',
-	'0017': 'caught',
 	'0140': 'exercise complete'
 };
 
